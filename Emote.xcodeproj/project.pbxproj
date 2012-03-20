@@ -6,8 +6,22 @@
 	objectVersion = 46;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		933CA0FF1502575200A0C530 /* hello.h in Headers */ = {isa = PBXBuildFile; fileRef = 933CA0FE1502575200A0C530 /* hello.h */; };
+		933CA1011502576300A0C530 /* hello.c in Sources */ = {isa = PBXBuildFile; fileRef = 933CA1001502576300A0C530 /* hello.c */; };
+		935D150F1507F98500043FCA /* Emote.h in Headers */ = {isa = PBXBuildFile; fileRef = 935D150E1507F98500043FCA /* Emote.h */; };
+		935D15121507F9AD00043FCA /* Emote.c in Sources */ = {isa = PBXBuildFile; fileRef = 935D15111507F9AD00043FCA /* Emote.c */; };
+		937833621508B4E10008253C /* libftd2xx.1.1.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 937833611508B4E10008253C /* libftd2xx.1.1.0.dylib */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		933CA0E21502519100A0C530 /* libEmote.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = libEmote.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
+		933CA0FE1502575200A0C530 /* hello.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = hello.h; path = src/hello.h; sourceTree = "<group>"; };
+		933CA1001502576300A0C530 /* hello.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = hello.c; path = src/hello.c; sourceTree = "<group>"; };
+		935D150E1507F98500043FCA /* Emote.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Emote.h; path = src/Emote.h; sourceTree = "<group>"; };
+		935D15111507F9AD00043FCA /* Emote.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = Emote.c; path = src/Emote.c; sourceTree = "<group>"; };
+		937833611508B4E10008253C /* libftd2xx.1.1.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libftd2xx.1.1.0.dylib; path = lib/Mac/libftd2xx.1.1.0.dylib; sourceTree = "<group>"; };
+		93BBEEAE1512B44B003A43DE /* libpthread.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libpthread.dylib; path = usr/lib/libpthread.dylib; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -15,6 +29,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				937833621508B4E10008253C /* libftd2xx.1.1.0.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -24,6 +39,9 @@
 		933CA0D71502519100A0C530 = {
 			isa = PBXGroup;
 			children = (
+				93BBEEAE1512B44B003A43DE /* libpthread.dylib */,
+				937833611508B4E10008253C /* libftd2xx.1.1.0.dylib */,
+				933CA0F8150253F600A0C530 /* Emote */,
 				933CA0E31502519100A0C530 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -36,6 +54,17 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		933CA0F8150253F600A0C530 /* Emote */ = {
+			isa = PBXGroup;
+			children = (
+				933CA0FE1502575200A0C530 /* hello.h */,
+				933CA1001502576300A0C530 /* hello.c */,
+				935D150E1507F98500043FCA /* Emote.h */,
+				935D15111507F9AD00043FCA /* Emote.c */,
+			);
+			name = Emote;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -43,6 +72,8 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				933CA0FF1502575200A0C530 /* hello.h in Headers */,
+				935D150F1507F98500043FCA /* Emote.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -72,7 +103,8 @@
 		933CA0D91502519100A0C530 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0420;
+				LastUpgradeCheck = 0430;
+				ORGANIZATIONNAME = something.pl;
 			};
 			buildConfigurationList = 933CA0DC1502519100A0C530 /* Build configuration list for PBXProject "Emote" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -96,6 +128,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				933CA1011502576300A0C530 /* hello.c in Sources */,
+				935D15121507F9AD00043FCA /* Emote.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -105,7 +139,7 @@
 		933CA0E41502519100A0C530 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
+				ALWAYS_SEARCH_USER_PATHS = YES;
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -122,16 +156,19 @@
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				LIBRARY_SEARCH_PATHS = "";
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				ONLY_ACTIVE_ARCH = YES;
+				REZ_SEARCH_PATHS = "";
 				SDKROOT = macosx;
+				USER_HEADER_SEARCH_PATHS = "";
 			};
 			name = Debug;
 		};
 		933CA0E51502519100A0C530 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
+				ALWAYS_SEARCH_USER_PATHS = YES;
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
@@ -142,8 +179,11 @@
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				LIBRARY_SEARCH_PATHS = "";
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				REZ_SEARCH_PATHS = "";
 				SDKROOT = macosx;
+				USER_HEADER_SEARCH_PATHS = "";
 			};
 			name = Release;
 		};
@@ -151,6 +191,11 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				EXECUTABLE_PREFIX = lib;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/lib\"",
+					"\"$(SRCROOT)/lib/Mac\"",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -159,6 +204,11 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				EXECUTABLE_PREFIX = lib;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/lib\"",
+					"\"$(SRCROOT)/lib/Mac\"",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
@@ -182,6 +232,7 @@
 				933CA0E81502519100A0C530 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
