@@ -9,10 +9,25 @@
 #ifndef Emote_Emote_h
 #define Emote_Emote_h
 
-int Emote_init(void);
-void Emote_shutdown(void);
-void Emote_printErrorMessage(void);
-void Emote_startMonitoringHeart(void);
-void Emote_stopMonitoringHeart(void);
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+    int     Emote_init(void);
+    void    Emote_shutdown(void);
+    void    Emote_printErrorMessage(void);
+    void    Emote_startMonitoring(void);
+    void    Emote_stopMonitoring(void);
+    int     Emote_getHeartRate(void);
+    void    Emote_setHistoryLength(unsigned int);
+    int     Emote_getHistory(int index);
+    void    Emote_setHistory(int value);
+    float   Emote_getStressLevel(void);
+    int     Emote_getReferenceHeartRate(void);
+    float   Emote_getAverageHeartRate(void);
+    
+#ifdef __cplusplus
+}
+#endif
 
 #endif

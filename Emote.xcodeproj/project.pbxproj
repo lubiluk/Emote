@@ -7,8 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		933CA0FF1502575200A0C530 /* hello.h in Headers */ = {isa = PBXBuildFile; fileRef = 933CA0FE1502575200A0C530 /* hello.h */; };
-		933CA1011502576300A0C530 /* hello.c in Sources */ = {isa = PBXBuildFile; fileRef = 933CA1001502576300A0C530 /* hello.c */; };
 		935D150F1507F98500043FCA /* Emote.h in Headers */ = {isa = PBXBuildFile; fileRef = 935D150E1507F98500043FCA /* Emote.h */; };
 		935D15121507F9AD00043FCA /* Emote.c in Sources */ = {isa = PBXBuildFile; fileRef = 935D15111507F9AD00043FCA /* Emote.c */; };
 		937833621508B4E10008253C /* libftd2xx.1.1.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 937833611508B4E10008253C /* libftd2xx.1.1.0.dylib */; };
@@ -16,8 +14,6 @@
 
 /* Begin PBXFileReference section */
 		933CA0E21502519100A0C530 /* libEmote.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = libEmote.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
-		933CA0FE1502575200A0C530 /* hello.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = hello.h; path = src/hello.h; sourceTree = "<group>"; };
-		933CA1001502576300A0C530 /* hello.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = hello.c; path = src/hello.c; sourceTree = "<group>"; };
 		935D150E1507F98500043FCA /* Emote.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Emote.h; path = src/Emote.h; sourceTree = "<group>"; };
 		935D15111507F9AD00043FCA /* Emote.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = Emote.c; path = src/Emote.c; sourceTree = "<group>"; };
 		937833611508B4E10008253C /* libftd2xx.1.1.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libftd2xx.1.1.0.dylib; path = lib/Mac/libftd2xx.1.1.0.dylib; sourceTree = "<group>"; };
@@ -57,8 +53,6 @@
 		933CA0F8150253F600A0C530 /* Emote */ = {
 			isa = PBXGroup;
 			children = (
-				933CA0FE1502575200A0C530 /* hello.h */,
-				933CA1001502576300A0C530 /* hello.c */,
 				935D150E1507F98500043FCA /* Emote.h */,
 				935D15111507F9AD00043FCA /* Emote.c */,
 			);
@@ -72,7 +66,6 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				933CA0FF1502575200A0C530 /* hello.h in Headers */,
 				935D150F1507F98500043FCA /* Emote.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -128,7 +121,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				933CA1011502576300A0C530 /* hello.c in Sources */,
 				935D15121507F9AD00043FCA /* Emote.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -140,7 +132,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = YES;
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -157,10 +149,10 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				LIBRARY_SEARCH_PATHS = "";
-				MACOSX_DEPLOYMENT_TARGET = 10.7;
-				ONLY_ACTIVE_ARCH = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.6;
+				ONLY_ACTIVE_ARCH = NO;
 				REZ_SEARCH_PATHS = "";
-				SDKROOT = macosx;
+				SDKROOT = macosx10.6;
 				USER_HEADER_SEARCH_PATHS = "";
 			};
 			name = Debug;
@@ -169,7 +161,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = YES;
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -180,9 +172,9 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				LIBRARY_SEARCH_PATHS = "";
-				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				MACOSX_DEPLOYMENT_TARGET = 10.6;
 				REZ_SEARCH_PATHS = "";
-				SDKROOT = macosx;
+				SDKROOT = macosx10.6;
 				USER_HEADER_SEARCH_PATHS = "";
 			};
 			name = Release;
@@ -190,26 +182,35 @@
 		933CA0E71502519100A0C530 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				EXECUTABLE_PREFIX = lib;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/lib\"",
 					"\"$(SRCROOT)/lib/Mac\"",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 10.6;
+				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx10.6;
+				VALID_ARCHS = "i386 x86_64";
 			};
 			name = Debug;
 		};
 		933CA0E81502519100A0C530 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				EXECUTABLE_PREFIX = lib;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/lib\"",
 					"\"$(SRCROOT)/lib/Mac\"",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 10.6;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx10.6;
+				VALID_ARCHS = "i386 x86_64";
 			};
 			name = Release;
 		};
