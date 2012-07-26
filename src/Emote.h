@@ -25,6 +25,7 @@ extern "C" {
     float   Emote_getStressLevel(void);
     int     Emote_getReferenceHeartRate(void);
     float   Emote_getAverageHeartRate(void);
+    void    Emote_calibrate(void);
     
 #ifdef __cplusplus
 }

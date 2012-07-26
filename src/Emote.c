@@ -14,7 +14,7 @@
 #include <unistd.h>
 #include <time.h>
 #include "Emote.h"
-#include "ftd2xx.h"
+#include <ftd2xx.h>
 
 #define BUF_SIZE 16
 
@@ -27,7 +27,7 @@ char eeError[255];
 int initSuccess = 0;
 int monitoring = 0;
 int heartRate = 0;  // beats per minute
-int referencePulse = 0;
+int referencePulse = 70;
 float averagePulse = 0.f;
 
 typedef struct {
@@ -38,11 +38,14 @@ typedef struct {
 
 Emote_CircularBuffer historyBuffer;
 
-void * Emote_monitoringThreadMain(void* data);
-void Emote_resetCircularBuffer(Emote_CircularBuffer* buff);
-void Emote_setCircularBufferLength(Emote_CircularBuffer* buff, unsigned int lenght);
-void Emote_writeToCircularBuffer(Emote_CircularBuffer* buff, int value);
-int Emote_readFromCircularBuffer(Emote_CircularBuffer* buff, int index);
+static void * Emote_monitoringThreadMain(void* data);
+static void * Emote_calibratingThreadMain(void* data);
+static void Emote_resetCircularBuffer(Emote_CircularBuffer* buff);
+static void Emote_setCircularBufferLength(Emote_CircularBuffer* buff, unsigned int lenght);
+static void Emote_writeToCircularBuffer(Emote_CircularBuffer* buff, int value);
+static int Emote_readFromCircularBuffer(Emote_CircularBuffer* buff, int index);
+static float Emote_calculateAveragePulse(void);
+static void Emote_printCircularBuffer(Emote_CircularBuffer* buff);
 
 int Emote_init(void)
 {
@@ -75,6 +78,8 @@ int Emote_init(void)
     
     initSuccess = 1;
     
+    Emote_printCircularBuffer(&historyBuffer);
+    
     return 0;
 }
 
@@ -87,6 +92,8 @@ void Emote_shutdown(void)
 		FT_Close(ftHandle);
 		ftHandle = NULL;
 	}
+    
+    Emote_resetCircularBuffer(&historyBuffer);
 }
 
 void Emote_printErrorMessage(void)
@@ -142,19 +149,6 @@ void * Emote_monitoringThreadMain(void* data)
     
 //    clock_t start = clock();
     
-    for (int i = 0; i < 5; i++) {
-        FT_Write(ftHandle, "G1\r", 3, &dwBytesInQueue);
-		FT_Read(ftHandle, cBufRead, BUF_SIZE, &dwBytesRead);
-        
-        int status, count, hr;
-        
-        sscanf(cBufRead, "%d %d %d", &status, &count, &hr);
-        
-        heartRate = hr;
-    }
-    
-    referencePulse = heartRate;
-    
     while(monitoring) {
 //        start = clock();
         
@@ -174,6 +168,8 @@ void * Emote_monitoringThreadMain(void* data)
         
         Emote_setHistory(heartRate);
         
+        averagePulse = Emote_calculateAveragePulse();
+        
 //        printf("Data: %s\n", cBufRead);
 //        printf("Pulse: %d\n", hr);
         
@@ -185,7 +181,7 @@ void * Emote_monitoringThreadMain(void* data)
 
 int Emote_getHeartRate(void)
 {
-//    printf("Heart: %d\n", heartRate);
+    printf("Heart: %d\n", heartRate);
     return heartRate;
 }
 
@@ -205,7 +201,7 @@ void Emote_setCircularBufferLength(Emote_CircularBuffer* buff, unsigned int leng
     Emote_resetCircularBuffer(buff);
     
     buff->buffer = (int *)malloc(lenght * sizeof(int));
-    memset(buff->buffer, 0, sizeof(*(buff->buffer)));
+    memset(buff->buffer, 0, sizeof(int) * lenght);
     buff->lenght = lenght;
 }
 
@@ -226,11 +222,24 @@ int Emote_readFromCircularBuffer(Emote_CircularBuffer* buff, int index)
     return buff->buffer[(buff->start + index) % buff->lenght];
 }
 
+void Emote_printCircularBuffer(Emote_CircularBuffer* buff)
+{
+    printf("Buffer: ");
+    
+    for(int i = 0; i < buff->lenght; i++) {
+        printf("%d ", buff->buffer[i]);
+    }
+    
+    printf("\n");
+}
+
 void Emote_setHistoryLength(unsigned int lenght)
 {
     pthread_mutex_lock(&historyMutex);
     Emote_setCircularBufferLength(&historyBuffer, lenght);
     pthread_mutex_unlock(&historyMutex);
+    
+    Emote_printCircularBuffer(&historyBuffer);
 }
 
 int Emote_getHistory(int index)
@@ -247,19 +256,39 @@ void Emote_setHistory(int value)
         Emote_writeToCircularBuffer(&historyBuffer, value);
 }
 
-float Emote_getStressLevel(void) {
-    float avg = 0;
+float Emote_calculateAveragePulse(void)
+{
+    float avg = 0.f;
+    
+    printf("Average \n");
+    Emote_printCircularBuffer(&historyBuffer);
+    
+    int useful = 0;
     
     for (int i = 0; i < historyBuffer.lenght; i++) {
-        avg += Emote_getHistory(i);
+        int p = Emote_getHistory(i);
+        
+        if (p == 0) {
+            continue;
+        }
+        
+        avg += p;
+        useful += 1;
     }
     
-    avg /= historyBuffer.lenght;
+    avg /= useful;
+    
+    return avg;
+}
+
+float Emote_getStressLevel(void) {
+    static const float threshold = 15.f;
+    float avg = averagePulse;
     
     float stress = 0.f;
     
     if (avg > referencePulse) {
-        stress = (avg - referencePulse) / 15.f;
+        stress = (avg - referencePulse) / threshold;
     }
     
     printf("stress: %f\n", stress);
@@ -267,8 +296,6 @@ float Emote_getStressLevel(void) {
     if (stress > 1.f) {
         stress = 1.f;
     }
-    
-    averagePulse = avg;
     
     return stress;
 }
@@ -279,4 +306,45 @@ int Emote_getReferenceHeartRate(void) {
 
 float Emote_getAverageHeartRate(void) {
     return averagePulse;
+}
+
+void Emote_calibrate(void) {
+    if (initSuccess == 0) {
+        sprintf(eeError, "Can't start calibration after failed initialization.");
+        Emote_printErrorMessage();
+        return;
+    }
+    
+    // Create the thread using POSIX routines.
+    pthread_attr_t  attr;
+    int             returnVal;
+    
+    returnVal = pthread_attr_init(&attr);
+    assert(!returnVal);
+    returnVal = pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_JOINABLE);
+    assert(!returnVal);
+    
+    int threadError = pthread_create(&posixThreadID, &attr, &Emote_calibratingThreadMain, NULL);
+    
+    returnVal = pthread_attr_destroy(&attr);
+    assert(!returnVal);
+    if (threadError != 0)
+    {
+        // Report an error.
+    }
+}
+
+void * Emote_calibratingThreadMain(void* data)
+{
+    int waitTime = historyBuffer.lenght;
+    printf("Calibration started\n");
+    printf("Reference pulse %d\n", referencePulse);
+    sleep(waitTime);
+    
+    referencePulse = averagePulse;
+    
+    printf("Calibration finished\n");
+    printf("Reference pulse %d\n", referencePulse);
+    
+    return NULL;
 }
