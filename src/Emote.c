@@ -11,10 +11,18 @@
 #include <string.h>
 #include <pthread.h>
 #include <assert.h>
+
+#ifndef WIN32
 #include <unistd.h>
+#endif
+
 #include <time.h>
 #include "Emote.h"
 #include <ftd2xx.h>
+
+#ifdef WIN32
+#include <Windows.h>
+#endif
 
 #define BUF_SIZE 16
 
@@ -339,7 +347,12 @@ void * Emote_calibratingThreadMain(void* data)
     int waitTime = historyBuffer.lenght;
     printf("Calibration started\n");
     printf("Reference pulse %d\n", referencePulse);
-    sleep(waitTime);
+
+#ifdef WIN32
+	Sleep(waitTime);
+#else
+	sleep(waitTime);
+#endif
     
     referencePulse = averagePulse;
     
